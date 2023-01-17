@@ -3,8 +3,11 @@ import { StoreProvider } from "../utils/Store";
 import NProgress from "nprogress";
 import { useRouter } from "next/router";
 import Head from "next/head";
+import dynamic from "next/dynamic";
+import { SnackbarProvider } from "notistack";
+import { PayPalScriptProvider } from "@paypal/react-paypal-js";
 
-export default function App({ Component, pageProps }) {
+function App({ Component, pageProps }) {
   const router = useRouter();
   useEffect(() => {
     const jssStyles = document.querySelector("#jss-server-side");
@@ -39,9 +42,17 @@ export default function App({ Component, pageProps }) {
           referrerPolicy="no-referrer"
         />
       </Head>
-      <StoreProvider>
-        <Component {...pageProps} />
-      </StoreProvider>
+      <SnackbarProvider
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+      >
+        <StoreProvider>
+          <PayPalScriptProvider deferLoading={true}>
+            <Component {...pageProps} />
+          </PayPalScriptProvider>
+        </StoreProvider>
+      </SnackbarProvider>
     </>
   );
 }
+
+export default dynamic(() => Promise.resolve(App), { ssr: false });
