@@ -16,7 +16,7 @@ export default function Home(props) {
           {products.map((product) => {
             return (
               <Grid item md={4} key={product.name}>
-                <Card>
+                <Card style={{ margin: "0.4rem" }}>
                   <NextLink href={`/product/${product.slug}`} legacyBehavior>
                     <a>
                       <CardActionArea>
